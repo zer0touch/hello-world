@@ -1,5 +1,5 @@
 
-FROM ubuntu:latest
+FROM alpine:latest
 
 ADD helloworld /bin/helloworld
 RUN \
