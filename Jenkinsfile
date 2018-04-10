@@ -47,8 +47,8 @@ node {
                     echo 'Building Executable'
 
                     //Produced binary is $GOPATH/src/cmd/project/project
-                    sh """cd $GOPATH/src && docker build -t helloworld ."""
-                    sh 'docker images'
+                    sh """cd $GOPATH/src && /usr/bin/docker build -t helloworld ."""
+                    sh '/usr/bin/docker images'
                 }
                 
             }
