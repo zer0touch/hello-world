@@ -34,20 +34,20 @@ node {
                     
                     echo 'Vetting'
 
-                    sh """cd $GOPATH && go tool vet ${paths}"""
+                    sh """cd $GOPATH && go tool vet ."""
 
                     echo 'Linting'
-                    sh """cd $GOPATH && golint ${paths}"""
+                    sh """cd $GOPATH/src && golint ."""
                     
                     echo 'Testing'
-                    sh """cd $GOPATH && go test -race -cover ${paths}"""
+                    sh """cd $GOPATH/src && go test -race -cover ."""
                 }
             
                 stage('Build'){
                     echo 'Building Executable'
                 
                     //Produced binary is $GOPATH/src/cmd/project/project
-                    sh """go build """
+                    sh """cd $GOPATH/src go build """
                 }
                 
             }
