@@ -38,7 +38,7 @@ node {
                 stage('Sonar'){
 
                     echo 'Running Sonar'
-                    sh """cd $GOPATH && sonar-scanner -Dsonar.projectKey=hello-world -Dsonar.sources=./src -Dsonar.host.url=http://build:9000 -Dsonar.login=2bdcbe0278ab6d61104e4ad06e666b6608d49b48"""
+                    sh """cd $GOPATH && sonar-scanner -Dsonar.projectKey=hello-world -Dsonar.sources=./src -Dsonar.host.url=http://build:9000 -Dsonar.login=admin -Dsonar.password=admin"""
 
                     echo 'Testing'
                 }
