@@ -5,11 +5,13 @@ node {
                 env.PATH="${GOPATH}/bin:$PATH"
                 env.GOROOT="/usr/lib/go"
                 
+                //Checkout our Code
                 stage('Checkout'){
                     echo 'Checking out SCM'
                     checkout scm
                 }
                 
+                //Pre test setup
                 stage('Pre Test'){
                     echo 'Pulling Dependencies'
                     sh 'go version'
@@ -18,28 +20,22 @@ node {
                     
                 }
         
+                //Test stage
                 stage('Test'){
                     
-                    //List all our project files with 'go list ./... | grep -v /vendor/ | grep -v github.com | grep -v golang.org'
                     //Push our project files relative to ./src
                     sh 'cd $GOPATH && go list ./... | grep -v /vendor/ | grep -v github.com | grep -v golang.org > projectPaths'
                     
                     //Print them with 'awk '$0="./src/"$0' projectPaths' in order to get full relative path to $GOPATH
                     def paths = sh returnStdout: true, script: """awk '\$0="./src/"\$0' projectPaths"""
-                    
-                    echo 'Vetting'
-
 
                     echo 'Linting'
                     sh """cd $GOPATH/src && golint ."""
                     
-                    echo 'Testing'
                 }
 
+                //Adding Sonar Scanner
                 stage('Sonar'){
-
-                    //List all our project files with 'go list ./... | grep -v /vendor/ | grep -v github.com | grep -v golang.org'
-                    //Push our project files relative to ./src
 
                     echo 'Running Sonar'
                     sh """cd $GOPATH && sonar-scanner -Dsonar.projectKey=hello-world -Dsonar.sources=./src -Dsonar.host.url=http://build:9000 -Dsonar.login=2bdcbe0278ab6d61104e4ad06e666b6608d49b48"""
@@ -47,6 +43,7 @@ node {
                     echo 'Testing'
                 }
             
+                //Build the executable
                 stage('Build'){
                     echo 'Building Executable'
                 
@@ -54,15 +51,32 @@ node {
                     sh """cd $GOPATH/src && go build -o helloworld"""
                 }
                 
+                //Change the docker host
                 env.DOCKER_HOST="tcp://build:2376"
+
+                //Build the Docker image
                 stage('Build Docker Image'){
-                    echo 'Building Executable'
+                    echo 'Building Docker image'
 
                     //Produced binary is $GOPATH/src/cmd/project/project
                     sh """cd $GOPATH/src && /usr/bin/docker build -t helloworld ."""
                     sh '/usr/bin/docker images'
+                    echo 'Exporting Docker image'
+                    sh '/usr/bin/docker save helloworld > helloworld.tgz'
                 }
                 
+                //Change the docker host
+                env.DOCKER_HOST="tcp://target:2376"
+
+                //Deploy the container
+                stage('Deploy'){
+                    echo 'Deploying our artifact'
+
+                    //Produced binary is $GOPATH/src/cmd/project/project
+                    sh '/usr/bin/docker import helloworld.tgz helloworld:latest'
+                    sh '/usr/bin/docker run -d -P -p 8080:8080 helloworld:latest'
+                }
+
             }
         }
     }catch (e) {
