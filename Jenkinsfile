@@ -35,13 +35,25 @@ node {
                     
                     echo 'Testing'
                 }
+
+                stage('Sonar'){
+
+                    //List all our project files with 'go list ./... | grep -v /vendor/ | grep -v github.com | grep -v golang.org'
+                    //Push our project files relative to ./src
+
+                    echo 'Running Sonar'
+                    sh """cd $GOPATH && sonar-scanner -Dsonar.projectKey=hello-world -Dsonar.sources=./src -Dsonar.host.url=http://build:9000 -Dsonar.login=2bdcbe0278ab6d61104e4ad06e666b6608d49b48"""
+
+                    echo 'Testing'
+                }
             
                 stage('Build'){
                     echo 'Building Executable'
                 
                     //Produced binary is $GOPATH/src/cmd/project/project
-                    sh """cd $GOPATH/src && go build -o hellworld"""
+                    sh """cd $GOPATH/src && go build -o helloworld"""
                 }
+                
                 env.DOCKER_HOST="tcp://build:2376"
                 stage('Build Docker Image'){
                     echo 'Building Executable'
