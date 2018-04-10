@@ -73,7 +73,7 @@ node {
                     echo 'Deploying our artifact'
 
                     //Produced binary is $GOPATH/src/cmd/project/project
-                    sh '/usr/bin/docker import helloworld.tar helloworld:latest'
+                    sh '/usr/bin/docker load -i helloworld.tar'
                     sh '/usr/bin/docker run -d -P -p 8080:8080 helloworld:latest /bin/helloworld'
                 }
 
