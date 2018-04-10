@@ -40,7 +40,7 @@ node {
                     sh """cd $GOPATH/src && golint ."""
                     
                     echo 'Testing'
-                    sh """cd $GOPATH/src && go test -race -cover ."""
+                    //sh """cd $GOPATH/src && go test -race -cover ."""
                 }
             
                 stage('Build'){
