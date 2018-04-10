@@ -12,15 +12,10 @@ node {
                 
                 stage('Pre Test'){
                     echo 'Pulling Dependencies'
-                    sh 'ls -ltr'
                     sh 'go version'
-                    sh 'go get -u github.com/golang/dep/cmd/dep'
                     sh 'go get -u github.com/golang/lint/golint'
                     sh 'go get github.com/tebeka/go2xunit'
                     
-                    //or -update
-                    //sh 'cd src && dep init' 
-                    //sh 'cd src && dep ensure' 
                 }
         
                 stage('Test'){
@@ -34,20 +29,26 @@ node {
                     
                     echo 'Vetting'
 
-                    //sh """cd $GOPATH && go tool vet ."""
 
                     echo 'Linting'
                     sh """cd $GOPATH/src && golint ."""
                     
                     echo 'Testing'
-                    //sh """cd $GOPATH/src && go test -race -cover ."""
                 }
             
                 stage('Build'){
                     echo 'Building Executable'
                 
                     //Produced binary is $GOPATH/src/cmd/project/project
-                    sh """cd $GOPATH/src go build """
+                    sh """cd $GOPATH/src && go build -o hellworld"""
+                }
+
+                stage('Build Docker Image'){
+                    echo 'Building Executable'
+
+                    //Produced binary is $GOPATH/src/cmd/project/project
+                    sh """cd $GOPATH/src && DOCKER_HOST=tcp://build:2376 docker build -t helloworld ."""
+                    sh 'DOCKER_HOST=tcp://build:2376 docker images'
                 }
                 
             }
