@@ -42,13 +42,13 @@ node {
                     //Produced binary is $GOPATH/src/cmd/project/project
                     sh """cd $GOPATH/src && go build -o hellworld"""
                 }
-
+                env.DOCKER_HOST="tcp://build:2376"
                 stage('Build Docker Image'){
                     echo 'Building Executable'
 
                     //Produced binary is $GOPATH/src/cmd/project/project
-                    sh """cd $GOPATH/src && DOCKER_HOST=tcp://build:2376 docker build -t helloworld ."""
-                    sh 'DOCKER_HOST=tcp://build:2376 docker images'
+                    sh """cd $GOPATH/src && docker build -t helloworld ."""
+                    sh 'docker images'
                 }
                 
             }
