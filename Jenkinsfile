@@ -59,10 +59,10 @@ node {
                     echo 'Building Docker image'
 
                     //Produced binary is $GOPATH/src/cmd/project/project
-                    sh """cd $GOPATH/src && /usr/bin/docker build -t helloworld ."""
+                    sh """cd $GOPATH/src && /usr/bin/docker build -t helloworld:latest ."""
                     sh '/usr/bin/docker images'
                     echo 'Exporting Docker image'
-                    sh '/usr/bin/docker save helloworld > helloworld.tgz'
+                    sh '/usr/bin/docker docker save -o helloworld.tar helloworld:latest'
                 }
                 
                 //Change the docker host
@@ -73,8 +73,8 @@ node {
                     echo 'Deploying our artifact'
 
                     //Produced binary is $GOPATH/src/cmd/project/project
-                    sh '/usr/bin/docker import helloworld.tgz helloworld:latest'
-                    sh '/usr/bin/docker run -d -P -p 8080:8080 helloworld:latest'
+                    sh '/usr/bin/docker import helloworld.tar helloworld:latest'
+                    sh '/usr/bin/docker run -d -P -p 8080:8080 helloworld:latest /bin/helloworld'
                 }
 
             }
