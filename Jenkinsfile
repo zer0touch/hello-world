@@ -62,7 +62,7 @@ node {
                     sh """cd $GOPATH/src && /usr/bin/docker build -t helloworld:latest ."""
                     sh '/usr/bin/docker images'
                     echo 'Exporting Docker image'
-                    sh '/usr/bin/docker docker save -o helloworld.tar helloworld:latest'
+                    sh '/usr/bin/docker save -o helloworld.tar helloworld:latest'
                 }
                 
                 //Change the docker host
