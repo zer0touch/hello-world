@@ -32,9 +32,7 @@ node {
                     echo 'Linting'
                     sh """cd $GOPATH/src && golint ."""
 
-                    echo 'Go tests'
-                    sh """cd $GOPATH/src && go test ./..."""
-                    
+                   
                 }
 
                 //Adding Sonar Scanner
@@ -52,6 +50,14 @@ node {
                 
                     //Produced binary is $GOPATH/src/cmd/project/project
                     sh """cd $GOPATH/src && go build -o helloworld"""
+                }
+
+                //Build the executable
+                stage('Test Artifact'){
+                    echo 'Test Artifact'
+
+                    //Test Artifact
+                    sh """cd $GOPATH/src && go test ./..."""
                 }
                 
                 //Change the docker host
