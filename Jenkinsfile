@@ -16,8 +16,8 @@ node {
                     echo 'Pulling Dependencies'
                     sh 'go version'
                     sh 'go get -u github.com/golang/lint/golint'
-                    sh 'go get github.com/tebeka/go2xunit'
-                    
+                    sh 'go get -u github.com/gorilla/mux'
+                    //sh 'go get github.com/tebeka/go2xunit'   
                 }
         
                 //Test stage
@@ -31,6 +31,9 @@ node {
 
                     echo 'Linting'
                     sh """cd $GOPATH/src && golint ."""
+
+                    echo 'Go tests'
+                    sh """cd $GOPATH/src && go test ./..."""
                     
                 }
 
