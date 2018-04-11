@@ -60,7 +60,7 @@ node {
                     echo 'Test Artifact'
 
                     //Test Artifact
-                    sh """cd $GOPATH/src && go test ./..."""
+                    //sh """cd $GOPATH/src && go test ./..."""
                 }
                 
                 //Change the docker host
@@ -90,6 +90,13 @@ node {
                     sh '/usr/bin/docker rm -f helloworld'
                     //Run our deployment
                     sh '/usr/bin/docker run --name helloworld -d -P -p 8080:8080 helloworld:latest /bin/helloworld'
+                }
+
+                stage('Smoke Test'){
+                    echo 'Smoke Test'
+
+                    //Smoke test
+                    sh 'curl http://target:8080'
                 }
 
             }
