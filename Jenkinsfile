@@ -77,7 +77,10 @@ node {
 
                     //Produced binary is $GOPATH/src/cmd/project/project
                     sh '/usr/bin/docker load -i helloworld.tar'
-                    sh '/usr/bin/docker run -d -P -p 8080:8080 helloworld:latest /bin/helloworld'
+                    //Delete our running container
+                    sh '/usr/bin/docker rm -f helloworld'
+                    //Run our deployment
+                    sh '/usr/bin/docker run --name helloworld -d -P -p 8080:8080 helloworld:latest /bin/helloworld'
                 }
 
             }
