@@ -17,6 +17,9 @@ node {
                     sh 'go version'
                     sh 'go get -u github.com/golang/lint/golint'
                     sh 'go get -u github.com/gorilla/mux'
+                    sh 'go get -u golang.org/x/net/html'
+                    sh 'go get -u golang.org/x/net/html/atom'
+                    sh 'go get -u golang.org/x/net/websocket'
                     //sh 'go get github.com/tebeka/go2xunit'   
                 }
         
